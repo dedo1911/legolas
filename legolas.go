@@ -112,6 +112,7 @@ func getCertificate(w http.ResponseWriter, r *http.Request) {
 		Domain:    r.URL.Query().Get("domain"),
 	})
 	if err != nil {
+		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
