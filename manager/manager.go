@@ -50,7 +50,6 @@ func GetCertificate(request *CertificateRequest) (*certificate.Resource, error) 
 	}
 
 	if isNewDomain { // Generate new certificate
-		log.Println("NEW DOMAIN")
 		cfConfig := cloudflare.NewDefaultConfig() // TODO: move into request
 		cfConfig.AuthEmail = request.AuthEmail
 		cfConfig.AuthKey = request.AuthKey

@@ -95,7 +95,7 @@ func readUser(email string) (*User, error) {
 }
 
 func (u *User) writeUser() error {
-	os.MkdirAll(accountsFolder, 0600)
+	os.MkdirAll(accountsFolder, os.ModePerm)
 	privateKey, err := x509.MarshalECPrivateKey(u.key.(*ecdsa.PrivateKey))
 	if err != nil {
 		return err

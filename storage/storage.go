@@ -31,7 +31,7 @@ func getFileName(account, domain string) string {
 }
 
 func GetCertificate(account, domain string) (*certificate.Resource, error) {
-	os.MkdirAll(certificatesFolder, 0600)
+	os.MkdirAll(certificatesFolder, os.ModePerm)
 	data, err := os.ReadFile(getFileName(account, domain))
 	if err != nil {
 		return nil, err
