@@ -11,7 +11,7 @@ RUN CGO_ENABLED=0 go build -o /legolas
 RUN apt update -qqq && apt install -yqqq ca-certificates && update-ca-certificates
 
 # Copy over to a small container to minimize footprint and attack surface
-FROM gcr.io/distroless/static-debian11:debug-nonroot
+FROM gcr.io/distroless/static:nonroot
 
 COPY --from=build /etc/ssl/certs /etc/ssl/certs
 COPY --from=build /legolas /home/nonroot/
