@@ -1,19 +1,17 @@
 # Build the application
-FROM golang:1 as build
+FROM golang:1-alpine as build
 WORKDIR /src
 
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN CGO_ENABLED=0 go build -o /legolas
+RUN CGO_ENABLED=0 go build -o /opt/legolas/legolas
+RUN rm -rf /src
 
 # We need updated CAs
-RUN apt update -qqq && apt install -yqqq ca-certificates && update-ca-certificates
+COPY stg/letsencrypt-stg-root-x1.pem /etc/ssl/certs/letsencrypt-stg-root-x1.pem
+COPY stg/letsencrypt-stg-root-x2.pem /etc/ssl/certs/letsencrypt-stg-root-x2.pem
+RUN apk --no-cache add ca-certificates && update-ca-certificates
 
-# Copy over to a small container to minimize footprint and attack surface
-FROM gcr.io/distroless/static:nonroot
-
-COPY --from=build /etc/ssl/certs /etc/ssl/certs
-COPY --from=build /legolas /home/nonroot/
-
-ENTRYPOINT ["/home/nonroot/legolas"]
+WORKDIR /data
+ENTRYPOINT ["/opt/legolas/legolas"]
