@@ -19,6 +19,7 @@ type CertificateRequest struct {
 	AuthEmail string
 	AuthKey   string
 	Domain    string
+	IsStaging bool
 }
 
 func GetCertificate(request *CertificateRequest) (*certificate.Resource, error) {
@@ -28,7 +29,10 @@ func GetCertificate(request *CertificateRequest) (*certificate.Resource, error) 
 	}
 
 	config := lego.NewConfig(user)
-	config.CADirURL = lego.LEDirectoryProduction // TODO: move into request
+	config.CADirURL = lego.LEDirectoryProduction
+	if request.IsStaging {
+		config.CADirURL = lego.LEDirectoryStaging
+	}
 	config.Certificate.KeyType = certcrypto.RSA2048
 
 	client, err := lego.NewClient(config)

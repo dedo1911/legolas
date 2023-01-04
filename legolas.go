@@ -105,11 +105,16 @@ func main() {
 
 func getCertificate(w http.ResponseWriter, r *http.Request) {
 	// TODO: create apikey auth mechanism
+	isStaging := false
+	if r.URL.Query().Get("isStaging") != "" {
+		isStaging = true
+	}
 	certificates, err := manager.GetCertificate(&manager.CertificateRequest{
 		Email:     r.URL.Query().Get("email"),
 		AuthEmail: r.URL.Query().Get("authEmail"),
 		AuthKey:   r.URL.Query().Get("authKey"),
 		Domain:    r.URL.Query().Get("domain"),
+		IsStaging: isStaging,
 	})
 	if err != nil {
 		log.Println(err)
