@@ -9,8 +9,6 @@ RUN CGO_ENABLED=0 go build -o /opt/legolas/legolas
 RUN rm -rf /src
 
 # We need updated CAs
-COPY stg/letsencrypt-stg-root-x1.pem /etc/ssl/certs/letsencrypt-stg-root-x1.pem
-COPY stg/letsencrypt-stg-root-x2.pem /etc/ssl/certs/letsencrypt-stg-root-x2.pem
 RUN apk --no-cache add ca-certificates && update-ca-certificates
 
 WORKDIR /data
